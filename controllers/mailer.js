@@ -1,48 +1,17 @@
 const nodemailer = require("nodemailer");
 const recomendaciones = require("../utils/recomendaciones");
-// const multer = require("multer");
-
-// var storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'public')
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname)
-//   }
-// })
-
-// const upload = multer({ storage: storage }).array('file')
-
-// const sendProcess = (req, res) => {
-//   upload(req, res, async function (err) {
-//     if (err instanceof multer.MulterError) {
-//       return res.status(500).json(err)
-//     } else if (err) {
-//       return res.status(500).json(err)
-//     }
-
-//     // TRANSFORM FILES INFO TO BE PASSED TO SENDMAIL FUNCTION
-//     const files = await attachFiles(req.files)
-
-//     // PASS MAIL INFO AND ATTACHMENTS
-//     await sendMail(JSON.parse(req.body.mailInfo), files);
-
-//     res.status(200).send(req.files)
-//     return
-//   })
-// }
 
 const sendProcess = async (req, res) => {
-  const files = await attachFiles2(req.files.file)
-  await sendMail(JSON.parse(req.body.mailInfo), files);
-  return res.json({ msg: 'Res' })
+  try {
+    const files = await attachFiles2(req.files.file)
+    await sendMail(JSON.parse(req.body.mailInfo), files);
+    return res.json({ msg: 'Email enviado con éxito' })
+  } catch (error) {
+    res.status(500).json({
+      msg: "Algo salió mal, contacte al admin"
+    })
+  }
 }
-
-// const attachFiles = async (files) => {
-//   return files.map(({ filename, path }) => ({
-//     filename, path
-//   }))
-// }
 
 const attachFiles2 = async (files) => {
   return files.map(({ name: filename, tempFilePath: path }) => ({
