@@ -1,5 +1,6 @@
 const express = require("express");
-const cors = require("cors")
+const cors = require("cors");
+const fileUpload = require("express-fileupload")
 
 class Server {
   constructor() {
@@ -13,10 +14,15 @@ class Server {
   middlewares() {
     this.app.use(cors());
     this.app.use(express.json())
+    this.app.use(fileUpload({
+      useTempFiles: true,
+      tempFileDir: '/tmp/'
+    }));
   }
 
   routes() {
     this.app.use("/api/mailer", require("../routes/mailer"))
+    this.app.use(fileUpload());
   }
 
   run() {
