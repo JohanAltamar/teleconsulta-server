@@ -25,14 +25,14 @@ const sendMail = async (body, attachments) => {
     host: "smtp.gmail.com",
     auth: {
       type: "login",
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
+      user: body.from,
+      pass: body.password,
     },
   });
 
   let info = await transporter.sendMail({
     to: body.to,
-    from: body.from,
+    from: body.from2,
     subject: body.subject,
     text: `${body.text}
     
