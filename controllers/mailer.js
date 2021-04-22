@@ -3,7 +3,7 @@ const recomendaciones = require("../utils/recomendaciones");
 
 const sendProcess = async (req, res) => {
   try {
-    const files = await attachFiles2(req.files.file)
+    const files = await attachFiles2(req.files)
     await sendMail(JSON.parse(req.body.mailInfo), files);
     return res.json({ msg: 'Email enviado con éxito' })
   } catch (error) {
@@ -14,9 +14,10 @@ const sendProcess = async (req, res) => {
 }
 
 const attachFiles2 = async (files) => {
-  return files.map(({ name: filename, tempFilePath: path }) => ({
-    filename, path
-  }))
+  // Files is an object.
+  return Object.keys(files).map(itemName => files[itemName] = {
+    filename: files[itemName].name, path: files[itemName].tempFilePath
+  })
 }
 
 const sendMail = async (body, attachments) => {
