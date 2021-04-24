@@ -3,11 +3,19 @@ const recomendaciones = require("../utils/recomendaciones");
 
 const sendProcess = async (req, res) => {
   try {
+<<<<<<< HEAD
     const files = await attachFiles2(req.files)
     await sendMail(JSON.parse(req.body.mailInfo), files);
     return res.json({ msg: 'Email enviado con éxito' })
   } catch (error) {
     console.log(error.code, ":", error.message)
+=======
+    const files = req.files ? await attachFiles2(req.files) : []
+    await sendMail(JSON.parse(req.body.mailInfo), files);
+    return res.json({ msg: 'Email enviado con éxito' })
+  } catch (error) {
+    console.log(error)
+>>>>>>> 83761a3 (message without attachments added)
     res.status(500).json({
       msg: "Algo salió mal, contacte al admin",
       code: error.code
