@@ -1,14 +1,20 @@
 const express = require("express");
 const cors = require("cors");
-const fileUpload = require("express-fileupload")
+const fileUpload = require("express-fileupload");
+const dbConnection = require("../database/config");
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 8080;
 
+    this.connectDatabase();
     this.middlewares();
     this.routes();
+  }
+
+  async connectDatabase(){
+    await dbConnection(); 
   }
 
   middlewares() {
@@ -21,8 +27,9 @@ class Server {
   }
 
   routes() {
-    this.app.use("/api/mailer", require("../routes/mailer"))
-    this.app.use(fileUpload());
+    this.app.use("/api/calls", require("../routes/calls"));
+    this.app.use("/api/mailer", require("../routes/mailer"));
+    // this.app.use(fileUpload());
   }
 
   run() {
